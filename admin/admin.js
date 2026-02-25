@@ -1,0 +1,353 @@
+// Navigation functionality
+const navItems = document.querySelectorAll(".nav-item");
+const sections = document.querySelectorAll(".content-section");
+const pageTitle = document.getElementById("pageTitle");
+const pageSubtitle = document.getElementById("pageSubtitle");
+const todayCount = document.getElementById("todayCount");
+const pendingCount = document.getElementById("pendingCount");
+
+// Section data
+const sectionData = {
+  cars: {
+    title: "Car Bookings",
+    subtitle: "Manage and track all car rental bookings",
+    todayCount: 24,
+    pendingCount: 8,
+  },
+  hotels: {
+    title: "Hotel Bookings",
+    subtitle: "Manage and track all hotel reservations",
+    todayCount: 15,
+    pendingCount: 5,
+  },
+  flights: {
+    title: "Flight Bookings",
+    subtitle: "Manage and track all flight ticket bookings",
+    todayCount: 32,
+    pendingCount: 12,
+  },
+};
+
+// Switch between sections
+navItems.forEach((item) => {
+  item.addEventListener("click", () => {
+    const sectionName = item.getAttribute("data-section");
+
+    // Update active nav item
+    navItems.forEach((nav) => nav.classList.remove("active"));
+    item.classList.add("active");
+
+    // Update active section
+    sections.forEach((section) => section.classList.remove("active"));
+    const activeSection = document.getElementById(`${sectionName}-section`);
+    if (activeSection) {
+      activeSection.classList.add("active");
+    }
+
+    // Update header content
+    const data = sectionData[sectionName];
+    if (data) {
+      pageTitle.textContent = data.title;
+      pageSubtitle.textContent = data.subtitle;
+      todayCount.textContent = data.todayCount;
+      pendingCount.textContent = data.pendingCount;
+    }
+  });
+});
+
+// Action buttons functionality
+document.addEventListener("click", async (e) => {
+  const target = e.target.closest(".action-btn");
+  if (!target) return;
+
+  const row = target.closest("tr");
+  const bookingId = row.dataset.id;
+  const token = localStorage.getItem("token");
+
+  if (!bookingId) return;
+
+  // =========================
+  // CONFIRM BOOKING
+  // =========================
+  if (target.classList.contains("confirm")) {
+    if (!confirm("Confirm this booking?")) return;
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/car-bookings/${bookingId}/confirm`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to confirm");
+
+      // تحديث الـ UI
+      const statusSpan = row.querySelector(".status-badge");
+      statusSpan.textContent = "confirmed";
+      statusSpan.className = "status-badge confirmed";
+
+      alert("Booking confirmed successfully!");
+    } catch (error) {
+      console.error(error);
+      alert("Error confirming booking");
+    }
+  }
+
+  // =========================
+  // DELETE BOOKING
+  // =========================
+  if (target.classList.contains("delete")) {
+    if (!confirm("Are you sure you want to delete this booking?")) return;
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/car-bookings/${bookingId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to delete");
+
+      // حذف من UI
+      row.style.animation = "fadeOut 0.3s ease";
+      setTimeout(() => row.remove(), 300);
+
+      alert("Booking deleted successfully!");
+    } catch (error) {
+      console.error(error);
+      alert("Error deleting booking");
+    }
+  }
+});
+
+// Logout functionality
+document.querySelector(".logout-btn").addEventListener("click", () => {
+  if (confirm("Are you sure you want to logout?")) {
+    // Clear any stored tokens
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    // Redirect to login page
+    window.location.href = "travel_login_html.html";
+  }
+});
+
+// Add fade out animation
+const style = document.createElement("style");
+style.textContent = `
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+  }
+`;
+document.head.appendChild(style);
+
+// Mobile sidebar toggle (for responsive design)
+function createMobileToggle() {
+  if (window.innerWidth <= 768) {
+    const sidebar = document.querySelector(".sidebar");
+    const mainContent = document.querySelector(".main-content");
+
+    // Create toggle button if it doesn't exist
+    if (!document.querySelector(".mobile-toggle")) {
+      const toggleBtn = document.createElement("button");
+      toggleBtn.className = "mobile-toggle";
+      toggleBtn.innerHTML = `
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      `;
+      toggleBtn.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1000;
+        background: var(--primary);
+        border: none;
+        border-radius: 8px;
+        padding: 10px;
+        cursor: pointer;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--shadow-md);
+      `;
+
+      toggleBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+      });
+
+      document.body.appendChild(toggleBtn);
+
+      // Close sidebar when clicking outside
+      mainContent.addEventListener("click", () => {
+        if (sidebar.classList.contains("open")) {
+          sidebar.classList.remove("open");
+        }
+      });
+    }
+  }
+}
+
+// Initialize mobile toggle on load and resize
+createMobileToggle();
+window.addEventListener("resize", createMobileToggle);
+
+// Add smooth scroll behavior
+document.documentElement.style.scrollBehavior = "smooth";
+
+console.log("Admin Dashboard loaded successfully!");
+
+// ==========================================
+// LOAD CAR BOOKINGS FROM BACKEND
+// ==========================================
+
+async function loadCarBookings() {
+  try {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      console.error("No token found");
+      return;
+    }
+
+    const response = await fetch(
+      "http://localhost:5000/api/car-bookings",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const bookings = await response.json();
+
+    const tableBody = document.querySelector(
+      "#cars-section tbody"
+    );
+
+    if (!tableBody) {
+      console.error("Cars table not found");
+      return;
+    }
+
+    tableBody.innerHTML = "";
+
+    bookings.forEach((booking) => {
+  const row = document.createElement("tr");
+
+  // نحفظ الـ id في data attribute
+  row.dataset.id = booking._id;
+
+row.innerHTML = `
+<td>${booking.phone || "-"}</td>
+
+<td>
+  <strong>${booking.firstName || ""} ${booking.lastName || ""}</strong>
+  <br>
+  <small>${booking.email || "-"}</small>
+</td>
+
+<td>${booking.carName}</td>
+
+<td>${new Date(booking.pickupDateTime).toLocaleDateString()}</td>
+
+<td>${new Date(booking.dropoffDateTime).toLocaleDateString()}</td>
+
+<td>
+  <span class="status-badge ${booking.status}">
+    ${booking.status}
+  </span>
+</td>
+
+<td>$${booking.totalPrice}</td>
+
+<td class="actions">
+  <div class="actions-wrapper">
+    <button class="action-btn confirm-btn">
+      <span>✓</span>
+      <span>Confirm</span>
+    </button>
+
+    <button class="action-btn delete-btn">
+      <span>🗑</span>
+      <span>Delete</span>
+    </button>
+  </div>
+</td>
+`;
+// Select buttons
+const confirmBtn = row.querySelector(".confirm-btn");
+const deleteBtn = row.querySelector(".delete-btn");
+
+// Confirm action
+confirmBtn.addEventListener("click", async () => {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/api/car-bookings/${booking._id}/confirm`,
+      { method: "PUT" }
+    );
+
+    if (!response.ok) throw new Error("Failed to confirm");
+
+    location.reload(); // refresh table after confirm
+  } catch (error) {
+    console.error(error);
+    alert("Error confirming booking");
+  }
+});
+
+// Delete action
+deleteBtn.addEventListener("click", async () => {
+  const confirmDelete = confirm("Are you sure you want to delete?");
+  if (!confirmDelete) return;
+
+  try {
+    const response = await fetch(
+      `http://localhost:5000/api/car-bookings/${booking._id}`,
+      { method: "DELETE" }
+    );
+
+    if (!response.ok) throw new Error("Failed to delete");
+
+    location.reload(); // refresh table after delete
+  } catch (error) {
+    console.error(error);
+    alert("Error deleting booking");
+  }
+});
+
+      tableBody.appendChild(row);
+    });
+
+    console.log("Car bookings loaded");
+  } catch (error) {
+    console.error("Error loading bookings:", error);
+  }
+}
+
+// ==========================================
+// LOAD DATA WHEN PAGE OPENS
+// ==========================================
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadCarBookings();
+});
