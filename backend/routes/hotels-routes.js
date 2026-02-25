@@ -2,17 +2,17 @@ const express = require("express");
 const router = express.Router();
 const Booking = require("../models/Booking");
 
-// إنشاء حجز جديد
+// =====================
+// CREATE BOOKING
+// =====================
 router.post("/", async (req, res) => {
   try {
     const data = req.body;
 
-    // ✅ تأكيد إن guests Array
     if (data.guests && !Array.isArray(data.guests)) {
       data.guests = [data.guests];
     }
 
-    // 🔍 Validation بسيط
     if (!data.guests || data.guests.length === 0) {
       return res.status(400).json({
         message: "بيانات النزيل مطلوبة"
@@ -26,11 +26,60 @@ router.post("/", async (req, res) => {
       booking
     });
   } catch (error) {
-    console.error(error);
     res.status(400).json({
       message: "فشل إنشاء الحجز",
       error: error.message
     });
+  }
+});
+
+// =====================
+// GET ALL BOOKINGS (ADMIN)
+// =====================
+router.get("/", async (req, res) => {
+  try {
+    const bookings = await Booking.find().sort({ createdAt: -1 });
+    res.json(bookings);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// =====================
+// CONFIRM BOOKING
+// =====================
+router.put("/:id/confirm", async (req, res) => {
+  try {
+    const booking = await Booking.findByIdAndUpdate(
+      req.params.id,
+      { status: "confirmed" },
+      { new: true }
+    );
+
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    res.json(booking);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// =====================
+// DELETE BOOKING
+// =====================
+router.delete("/:id", async (req, res) => {
+  try {
+    const booking = await Booking.findByIdAndDelete(req.params.id);
+
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    res.json({ message: "Deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
   }
 });
 

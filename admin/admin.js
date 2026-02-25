@@ -11,20 +11,17 @@ const sectionData = {
   cars: {
     title: "Car Bookings",
     subtitle: "Manage and track all car rental bookings",
-    todayCount: 24,
-    pendingCount: 8,
+
   },
   hotels: {
     title: "Hotel Bookings",
     subtitle: "Manage and track all hotel reservations",
-    todayCount: 15,
-    pendingCount: 5,
+
   },
   flights: {
     title: "Flight Bookings",
     subtitle: "Manage and track all flight ticket bookings",
-    todayCount: 32,
-    pendingCount: 12,
+
   },
 };
 
@@ -49,9 +46,17 @@ navItems.forEach((item) => {
     if (data) {
       pageTitle.textContent = data.title;
       pageSubtitle.textContent = data.subtitle;
-      todayCount.textContent = data.todayCount;
-      pendingCount.textContent = data.pendingCount;
     }
+
+    // 🔥 هنا تحط التحميل الديناميك
+    if (sectionName === "cars") {
+      loadCarBookings();
+    }
+
+    if (sectionName === "hotels") {
+      loadHotelBookings();
+    }
+
   });
 });
 
@@ -238,11 +243,20 @@ async function loadCarBookings() {
       }
     );
 
+    if (!response.ok) throw new Error("Failed to fetch bookings");
+
     const bookings = await response.json();
 
-    const tableBody = document.querySelector(
-      "#cars-section tbody"
-    );
+    // 🔥 احسب الإحصائيات بعد ما تجيب البيانات
+    const totalBookings = bookings.length;
+    const pendingBookings = bookings.filter(
+      (b) => b.status === "pending"
+    ).length;
+
+    todayCount.textContent = totalBookings;
+    pendingCount.textContent = pendingBookings;
+
+    const tableBody = document.querySelector("#cars-section tbody");
 
     if (!tableBody) {
       console.error("Cars table not found");
@@ -252,12 +266,10 @@ async function loadCarBookings() {
     tableBody.innerHTML = "";
 
     bookings.forEach((booking) => {
-  const row = document.createElement("tr");
+      const row = document.createElement("tr");
+      row.dataset.id = booking._id;
 
-  // نحفظ الـ id في data attribute
-  row.dataset.id = booking._id;
-
-row.innerHTML = `
+      row.innerHTML = `
 <td>${booking.phone || "-"}</td>
 
 <td>
@@ -294,60 +306,158 @@ row.innerHTML = `
   </div>
 </td>
 `;
-// Select buttons
-const confirmBtn = row.querySelector(".confirm-btn");
-const deleteBtn = row.querySelector(".delete-btn");
 
-// Confirm action
-confirmBtn.addEventListener("click", async () => {
-  try {
-    const response = await fetch(
-      `http://localhost:5000/api/car-bookings/${booking._id}/confirm`,
-      { method: "PUT" }
-    );
+      const confirmBtn = row.querySelector(".confirm-btn");
+      const deleteBtn = row.querySelector(".delete-btn");
 
-    if (!response.ok) throw new Error("Failed to confirm");
+      // Confirm
+      confirmBtn.addEventListener("click", async () => {
+        try {
+          const response = await fetch(
+            `http://localhost:5000/api/car-bookings/${booking._id}/confirm`,
+            { method: "PUT" }
+          );
 
-    location.reload(); // refresh table after confirm
-  } catch (error) {
-    console.error(error);
-    alert("Error confirming booking");
-  }
-});
+          if (!response.ok) throw new Error("Failed to confirm");
 
-// Delete action
-deleteBtn.addEventListener("click", async () => {
-  const confirmDelete = confirm("Are you sure you want to delete?");
-  if (!confirmDelete) return;
+          loadCarBookings(); // 🔥 بدل location.reload()
+        } catch (error) {
+          console.error(error);
+          alert("Error confirming booking");
+        }
+      });
 
-  try {
-    const response = await fetch(
-      `http://localhost:5000/api/car-bookings/${booking._id}`,
-      { method: "DELETE" }
-    );
+      // Delete
+      deleteBtn.addEventListener("click", async () => {
+        const confirmDelete = confirm("Are you sure?");
+        if (!confirmDelete) return;
 
-    if (!response.ok) throw new Error("Failed to delete");
+        try {
+          const response = await fetch(
+            `http://localhost:5000/api/car-bookings/${booking._id}`,
+            { method: "DELETE" }
+          );
 
-    location.reload(); // refresh table after delete
-  } catch (error) {
-    console.error(error);
-    alert("Error deleting booking");
-  }
-});
+          if (!response.ok) throw new Error("Failed to delete");
+
+          loadCarBookings(); // 🔥 تحديث بدون reload
+        } catch (error) {
+          console.error(error);
+          alert("Error deleting booking");
+        }
+      });
 
       tableBody.appendChild(row);
     });
 
-    console.log("Car bookings loaded");
   } catch (error) {
     console.error("Error loading bookings:", error);
   }
 }
+async function loadHotelBookings() {
+  try {
+    const response = await fetch(
+      "http://localhost:5000/api/hotels"
+    );
 
+    if (!response.ok) throw new Error("Failed to fetch hotels");
+
+    const bookings = await response.json();
+
+    // 🔥 احسب الإحصائيات
+    const totalBookings = bookings.length;
+    const pendingBookings = bookings.filter(
+      (b) => b.status === "pending"
+    ).length;
+
+    todayCount.textContent = totalBookings;
+    pendingCount.textContent = pendingBookings;
+
+    const tableBody = document.querySelector(
+      "#hotels-section tbody"
+    );
+
+    if (!tableBody) return;
+
+    tableBody.innerHTML = "";
+
+    bookings.forEach((booking) => {
+      const row = document.createElement("tr");
+      row.dataset.id = booking._id;
+
+      const firstGuest =
+        booking.guests && booking.guests.length > 0
+          ? booking.guests[0]
+          : null;
+
+      row.innerHTML = `
+<td>${firstGuest?.name || "-"}</td>
+
+<td>${firstGuest?.phone || "-"}</td>
+
+<td>${firstGuest?.email || "-"}</td>
+
+<td>${booking.hotelName}</td>
+
+<td>${new Date(booking.checkInDate).toLocaleDateString()}</td>
+
+<td>${new Date(booking.checkOutDate).toLocaleDateString()}</td>
+
+<td>${booking.numRooms}</td>
+
+<td>
+  <span class="status-badge ${booking.status}">
+    ${booking.status}
+  </span>
+</td>
+
+<td class="actions">
+  <div class="actions-wrapper">
+    <button class="action-btn confirm-btn">
+      ✓ Confirm
+    </button>
+
+    <button class="action-btn delete-btn">
+      🗑 Delete
+    </button>
+  </div>
+</td>
+`;
+
+      // Confirm
+      row.querySelector(".confirm-btn")
+        .addEventListener("click", async () => {
+          await fetch(
+            `http://localhost:5000/api/hotels/${booking._id}/confirm`,
+            { method: "PUT" }
+          );
+
+          loadHotelBookings(); // 🔥 تحديث بدون reload
+        });
+
+      // Delete
+      row.querySelector(".delete-btn")
+        .addEventListener("click", async () => {
+          await fetch(
+            `http://localhost:5000/api/hotels/${booking._id}`,
+            { method: "DELETE" }
+          );
+
+          loadHotelBookings(); // 🔥 تحديث بدون reload
+        });
+
+      tableBody.appendChild(row);
+    });
+
+  } catch (error) {
+    console.error("Error loading hotel bookings:", error);
+  }
+}
 // ==========================================
 // LOAD DATA WHEN PAGE OPENS
 // ==========================================
 
 document.addEventListener("DOMContentLoaded", () => {
   loadCarBookings();
+  loadHotelBookings();
 });

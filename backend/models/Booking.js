@@ -15,7 +15,11 @@ const BookingSchema = new mongoose.Schema({
   checkOutTime: { type: String, required: true },
   numRooms: { type: Number, required: true },
   numPeople: { type: Number, required: true },
-  guests: [GuestSchema]
+  guests: [GuestSchema],
+  status: {
+  type: String,
+  default: "pending",
+},
 }, { timestamps: true });
 
 module.exports = mongoose.model("Booking", BookingSchema);
