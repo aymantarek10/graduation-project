@@ -26,7 +26,7 @@ router.put("/:id/confirm", async (req, res) => {
     const booking = await CarBooking.findByIdAndUpdate(
       req.params.id,
       { status: "confirmed" },
-      { new: true }
+      { returnDocument: "after" }
     );
 
     if (!booking) {

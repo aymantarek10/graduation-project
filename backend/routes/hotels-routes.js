@@ -53,7 +53,7 @@ router.put("/:id/confirm", async (req, res) => {
     const booking = await Booking.findByIdAndUpdate(
       req.params.id,
       { status: "confirmed" },
-      { new: true }
+      { returnDocument: "after" }
     );
 
     if (!booking) {
