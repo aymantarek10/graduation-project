@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const Booking = require("../models/Booking");
-
+const protect = require("../middleware/authMiddleware");
 // =====================
 // CREATE BOOKING
 // =====================
-router.post("/", async (req, res) => {
+router.post("/", protect, async (req, res) => {
   try {
     const data = req.body;
 
@@ -19,12 +19,16 @@ router.post("/", async (req, res) => {
       });
     }
 
-    const booking = await Booking.create(data);
+    const booking = await Booking.create({
+      ...data,
+      user: req.user._id   // 🔥 أهم سطر
+    });
 
     res.status(201).json({
       message: "تم الحجز بنجاح",
       booking
     });
+
   } catch (error) {
     res.status(400).json({
       message: "فشل إنشاء الحجز",
