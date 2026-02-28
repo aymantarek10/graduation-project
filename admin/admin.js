@@ -142,7 +142,7 @@ document.querySelector(".logout-btn").addEventListener("click", () => {
     localStorage.removeItem("user");
 
     // Redirect to login page
-    window.location.href = "travel_login_html.html";
+    window.location.href = "/registration/login/travel_login_html.html";
   }
 });
 
