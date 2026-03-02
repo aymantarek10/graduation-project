@@ -56,6 +56,10 @@ navItems.forEach((item) => {
     if (sectionName === "hotels") {
       loadHotelBookings();
     }
+    if (sectionName === "flights") {
+      loadFlightBookings();
+    }
+
 
   });
 });
@@ -424,6 +428,9 @@ async function loadHotelBookings() {
 </td>
 `;
 
+
+
+
       // Confirm
       row.querySelector(".confirm-btn")
         .addEventListener("click", async () => {
@@ -454,10 +461,111 @@ async function loadHotelBookings() {
   }
 }
 // ==========================================
+// LOAD FLIGHT BOOKINGS
+// ==========================================
+
+async function loadFlightBookings() {
+  try {
+    const response = await fetch(
+      "http://localhost:5000/api/flight-bookings"
+    );
+
+    if (!response.ok) throw new Error("Failed to fetch flight bookings");
+
+    const bookings = await response.json();
+
+    // إحصائيات
+    const totalBookings = bookings.length;
+    const pendingBookings = bookings.filter(
+      (b) => b.status === "pending"
+    ).length;
+
+    todayCount.textContent = totalBookings;
+    pendingCount.textContent = pendingBookings;
+
+    const tableBody = document.querySelector(
+      "#flights-section tbody"
+    );
+
+    tableBody.innerHTML = "";
+
+    bookings.forEach((booking) => {
+      const row = document.createElement("tr");
+      row.dataset.id = booking._id;
+
+      row.innerHTML = `
+<td>
+  <strong>${booking.fullName || "-"}</strong>
+  <br>
+  <small>${booking.email || "-"}</small>
+</td>
+
+<td>${booking.toCity} → ${booking.fromCity}</td>
+
+
+<td>${new Date(booking.departureDate).toLocaleDateString()}</td>
+
+<td>
+  ${booking.returnDate
+          ? new Date(booking.returnDate).toLocaleDateString()
+          : "-"
+        }
+</td>
+
+<td>
+  <span class="status-badge ${booking.status}">
+    ${booking.status}
+  </span>
+</td>
+
+<td class="actions">
+  <div class="actions-wrapper">
+    <button class="action-btn confirm-btn">
+      ✓ Confirm
+    </button>
+
+    <button class="action-btn delete-btn">
+      🗑 Delete
+    </button>
+  </div>
+</td>
+`;
+
+      // Confirm
+      row.querySelector(".confirm-btn")
+        .addEventListener("click", async () => {
+          await fetch(
+            `http://localhost:5000/api/flight-bookings/${booking._id}/confirm`,
+            { method: "PUT" }
+          );
+
+          loadFlightBookings();
+        });
+
+      // Delete
+      row.querySelector(".delete-btn")
+        .addEventListener("click", async () => {
+          await fetch(
+            `http://localhost:5000/api/flight-bookings/${booking._id}`,
+            { method: "DELETE" }
+          );
+
+          loadFlightBookings();
+        });
+
+      tableBody.appendChild(row);
+    });
+
+  } catch (error) {
+    console.error("Error loading flight bookings:", error);
+  }
+}
+// ==========================================
 // LOAD DATA WHEN PAGE OPENS
 // ==========================================
 
 document.addEventListener("DOMContentLoaded", () => {
   loadCarBookings();
   loadHotelBookings();
+  loadFlightBookings();
 });

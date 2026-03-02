@@ -690,10 +690,67 @@
           </div>
         </div>
       `;
+
+        });
+        /* =====================
+  FLIGHT BOOKINGS
+=====================*/
+        data.flightBookings.forEach(flight => {
+
+          grid.innerHTML += `
+    <div class="card" data-type="flight">
+      <div class="card-header">
+        <div class="card-icon icon-flight">✈️</div>
+        <div>
+          <div class="card-type">رحلة</div>
+          <div class="card-title">
+            ${flight.fromCity} → ${flight.toCity}
+          </div>
+        </div>
+        <span class="badge badge-${flight.status}">
+          ${flight.status}
+        </span>
+      </div>
+
+      <div class="card-body">
+
+        <div class="route-line">
+          <div class="route-city">${flight.fromCity}</div>
+          <div class="route-arrow">
+            <div class="route-dash"></div>
+            <div class="plane-icon">✈</div>
+            <div class="route-dash"></div>
+          </div>
+          <div class="route-city">${flight.toCity}</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-block">
+            <div class="info-label">تاريخ الذهاب</div>
+            <div class="info-value">
+              ${new Date(flight.departureDate).toLocaleDateString()}
+            </div>
+          </div>
+
+          ${flight.returnDate ? `
+            <div class="info-block">
+              <div class="info-label">تاريخ العودة</div>
+              <div class="info-value">
+                ${new Date(flight.returnDate).toLocaleDateString()}
+              </div>
+            </div>
+            ` : ""
+            }
+        </div>
+
+      </div>
+    </div>
+  `;
         });
         const allBookings = [
           ...data.carBookings,
-          ...data.hotelBookings
+          ...data.hotelBookings,
+          ...data.flightBookings
         ];
 
         // ===== COUNTS =====
@@ -705,7 +762,8 @@
 
         const hotelCount = data.hotelBookings.length;
         const carCount = data.carBookings.length;
-        const flightCount = 0; // لحد ما تضيف flights
+        const flightCount = data.flightBookings.length;
+        // لحد ما تضيف flights
 
         // ===== UPDATE UI =====
         document.getElementById("totalBookings").textContent = total;
@@ -718,10 +776,13 @@
         document.getElementById("carCount").textContent = carCount;
         document.getElementById("flightCount").textContent = flightCount;
 
+
       } catch (err) {
         console.error(err);
       }
     }
+
+
 
     loadMyBookings();
   </script>
