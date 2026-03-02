@@ -1,25 +1,32 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>حجوزاتي</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     :root {
-      --blue-deep:   #0a1f44;
-      --blue-mid:    #1a3a6e;
+      --blue-deep: #0a1f44;
+      --blue-mid: #1a3a6e;
       --blue-accent: #1e6fff;
-      --blue-light:  #4d9fff;
-      --blue-pale:   #e8f1ff;
-      --white:       #ffffff;
-      --gray-light:  #f4f7fc;
-      --gray-text:   #6b7a99;
-      --success:     #00c48c;
-      --warning:     #ffaa00;
-      --danger:      #ff4d4d;
+      --blue-light: #4d9fff;
+      --blue-pale: #e8f1ff;
+      --white: #ffffff;
+      --gray-light: #f4f7fc;
+      --gray-text: #6b7a99;
+      --success: #00c48c;
+      --warning: #ffaa00;
+      --danger: #ff4d4d;
     }
 
     body {
@@ -40,15 +47,56 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: 0 2px 20px rgba(0,0,0,.3);
+      box-shadow: 0 2px 20px rgba(0, 0, 0, .3);
     }
-    .logo { color: var(--white); font-size: 1.4rem; font-weight: 900; letter-spacing: -0.5px; }
-    .logo span { color: var(--blue-light); }
-    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
-    .nav-links a { color: rgba(255,255,255,.7); text-decoration: none; font-size: .9rem; font-weight: 600; transition: color .2s; }
-    .nav-links a:hover, .nav-links a.active { color: var(--white); }
-    .nav-user { display: flex; align-items: center; gap: .75rem; }
-    .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--blue-accent); display: grid; place-items: center; color: #fff; font-weight: 700; font-size: .9rem; }
+
+    .logo {
+      color: var(--white);
+      font-size: 1.4rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+    }
+
+    .logo span {
+      color: var(--blue-light);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(255, 255, 255, .7);
+      text-decoration: none;
+      font-size: .9rem;
+      font-weight: 600;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--white);
+    }
+
+    .nav-user {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--blue-accent);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: .9rem;
+    }
 
     /* ── HERO BANNER ── */
     .hero {
@@ -58,16 +106,29 @@
       position: relative;
       overflow: hidden;
     }
+
     .hero::after {
       content: '';
       position: absolute;
-      bottom: -2px; left: 0; right: 0;
+      bottom: -2px;
+      left: 0;
+      right: 0;
       height: 60px;
       background: var(--gray-light);
       clip-path: ellipse(55% 100% at 50% 100%);
     }
-    .hero h1 { color: #fff; font-size: 2rem; font-weight: 900; margin-bottom: .5rem; }
-    .hero p  { color: rgba(255,255,255,.7); font-size: 1rem; }
+
+    .hero h1 {
+      color: #fff;
+      font-size: 2rem;
+      font-weight: 900;
+      margin-bottom: .5rem;
+    }
+
+    .hero p {
+      color: rgba(255, 255, 255, .7);
+      font-size: 1rem;
+    }
 
     /* ── FILTER TABS ── */
     .filters {
@@ -77,6 +138,7 @@
       padding: 2rem 1rem 1rem;
       flex-wrap: wrap;
     }
+
     .filter-btn {
       padding: .55rem 1.4rem;
       border-radius: 50px;
@@ -88,19 +150,28 @@
       font-weight: 700;
       cursor: pointer;
       transition: all .2s;
-      display: flex; align-items: center; gap: .4rem;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
     }
-    .filter-btn:hover, .filter-btn.active {
+
+    .filter-btn:hover,
+    .filter-btn.active {
       background: var(--blue-accent);
       color: #fff;
     }
+
     .filter-btn .count {
-      background: rgba(255,255,255,.25);
+      background: rgba(255, 255, 255, .25);
       border-radius: 50px;
       padding: 0 .45rem;
       font-size: .75rem;
     }
-    .filter-btn:not(.active) .count { background: var(--blue-pale); color: var(--blue-accent); }
+
+    .filter-btn:not(.active) .count {
+      background: var(--blue-pale);
+      color: var(--blue-accent);
+    }
 
     /* ── STATS ROW ── */
     .stats {
@@ -110,18 +181,29 @@
       justify-content: center;
       flex-wrap: wrap;
     }
+
     .stat-card {
       background: var(--white);
       border-radius: 16px;
       padding: 1.2rem 2rem;
       text-align: center;
-      box-shadow: 0 2px 12px rgba(30,111,255,.08);
+      box-shadow: 0 2px 12px rgba(30, 111, 255, .08);
       min-width: 140px;
       flex: 1;
       max-width: 200px;
     }
-    .stat-num { font-size: 1.8rem; font-weight: 900; color: var(--blue-accent); }
-    .stat-lbl { font-size: .8rem; color: var(--gray-text); margin-top: .2rem; }
+
+    .stat-num {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--blue-accent);
+    }
+
+    .stat-lbl {
+      font-size: .8rem;
+      color: var(--gray-text);
+      margin-top: .2rem;
+    }
 
     /* ── GRID ── */
     .bookings-grid {
@@ -138,21 +220,47 @@
       background: var(--white);
       border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 4px 24px rgba(10,31,68,.08);
+      box-shadow: 0 4px 24px rgba(10, 31, 68, .08);
       transition: transform .25s, box-shadow .25s;
       animation: fadeUp .4s ease both;
     }
-    .card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(30,111,255,.15); }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 36px rgba(30, 111, 255, .15);
+    }
 
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
-    .card:nth-child(2) { animation-delay: .07s; }
-    .card:nth-child(3) { animation-delay: .14s; }
-    .card:nth-child(4) { animation-delay: .21s; }
-    .card:nth-child(5) { animation-delay: .28s; }
-    .card:nth-child(6) { animation-delay: .35s; }
+
+    .card:nth-child(2) {
+      animation-delay: .07s;
+    }
+
+    .card:nth-child(3) {
+      animation-delay: .14s;
+    }
+
+    .card:nth-child(4) {
+      animation-delay: .21s;
+    }
+
+    .card:nth-child(5) {
+      animation-delay: .28s;
+    }
+
+    .card:nth-child(6) {
+      animation-delay: .35s;
+    }
 
     /* card header stripe */
     .card-header {
@@ -162,19 +270,42 @@
       gap: .9rem;
       border-bottom: 1px solid var(--blue-pale);
     }
+
     .card-icon {
-      width: 44px; height: 44px;
+      width: 44px;
+      height: 44px;
       border-radius: 12px;
-      display: grid; place-items: center;
+      display: grid;
+      place-items: center;
       font-size: 1.3rem;
       flex-shrink: 0;
     }
-    .icon-flight  { background: #e8f1ff; }
-    .icon-hotel   { background: #e8fff4; }
-    .icon-car     { background: #fff8e8; }
 
-    .card-type { font-size: .72rem; font-weight: 700; color: var(--gray-text); text-transform: uppercase; letter-spacing: .5px; }
-    .card-title { font-size: 1rem; font-weight: 800; color: var(--blue-deep); }
+    .icon-flight {
+      background: #e8f1ff;
+    }
+
+    .icon-hotel {
+      background: #e8fff4;
+    }
+
+    .icon-car {
+      background: #fff8e8;
+    }
+
+    .card-type {
+      font-size: .72rem;
+      font-weight: 700;
+      color: var(--gray-text);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--blue-deep);
+    }
 
     /* status badge */
     .badge {
@@ -184,13 +315,31 @@
       font-size: .75rem;
       font-weight: 700;
     }
-    .badge-confirmed { background: #d4f5ea; color: #00915e; }
-    .badge-pending   { background: #fff3d4; color: #c17a00; }
-    .badge-cancelled { background: #ffd4d4; color: #b50000; }
-    .badge-completed { background: var(--blue-pale); color: var(--blue-accent); }
+
+    .badge-confirmed {
+      background: #d4f5ea;
+      color: #00915e;
+    }
+
+    .badge-pending {
+      background: #fff3d4;
+      color: #c17a00;
+    }
+
+    .badge-cancelled {
+      background: #ffd4d4;
+      color: #b50000;
+    }
+
+    .badge-completed {
+      background: var(--blue-pale);
+      color: var(--blue-accent);
+    }
 
     /* card body */
-    .card-body { padding: 1.2rem 1.4rem; }
+    .card-body {
+      padding: 1.2rem 1.4rem;
+    }
 
     .info-row {
       display: flex;
@@ -199,10 +348,27 @@
       gap: 1rem;
       margin-bottom: 1rem;
     }
-    .info-block { flex: 1; }
-    .info-label { font-size: .72rem; color: var(--gray-text); font-weight: 600; margin-bottom: .15rem; }
-    .info-value { font-size: .95rem; font-weight: 700; color: var(--blue-deep); }
-    .info-value.big { font-size: 1.1rem; }
+
+    .info-block {
+      flex: 1;
+    }
+
+    .info-label {
+      font-size: .72rem;
+      color: var(--gray-text);
+      font-weight: 600;
+      margin-bottom: .15rem;
+    }
+
+    .info-value {
+      font-size: .95rem;
+      font-weight: 700;
+      color: var(--blue-deep);
+    }
+
+    .info-value.big {
+      font-size: 1.1rem;
+    }
 
     /* flight route line */
     .route-line {
@@ -211,15 +377,31 @@
       gap: .5rem;
       margin-bottom: 1rem;
     }
-    .route-city { font-size: 1.2rem; font-weight: 900; color: var(--blue-deep); }
+
+    .route-city {
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: var(--blue-deep);
+    }
+
     .route-arrow {
       flex: 1;
       display: flex;
       align-items: center;
       gap: .3rem;
     }
-    .route-dash { flex: 1; height: 1px; background: linear-gradient(90deg, var(--blue-light), var(--blue-pale)); }
-    .plane-icon { color: var(--blue-accent); font-size: 1rem; transform: scaleX(-1); }
+
+    .route-dash {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--blue-light), var(--blue-pale));
+    }
+
+    .plane-icon {
+      color: var(--blue-accent);
+      font-size: 1rem;
+      transform: scaleX(-1);
+    }
 
     /* divider */
     .divider {
@@ -235,8 +417,19 @@
       justify-content: space-between;
       gap: .75rem;
     }
-    .price { font-size: 1.15rem; font-weight: 900; color: var(--blue-accent); }
-    .price small { font-size: .75rem; font-weight: 600; color: var(--gray-text); display: block; }
+
+    .price {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: var(--blue-accent);
+    }
+
+    .price small {
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--gray-text);
+      display: block;
+    }
 
     .btn {
       padding: .55rem 1.2rem;
@@ -248,28 +441,54 @@
       border: none;
       transition: all .2s;
     }
+
     .btn-outline {
       background: transparent;
       border: 2px solid var(--blue-accent);
       color: var(--blue-accent);
     }
-    .btn-outline:hover { background: var(--blue-pale); }
+
+    .btn-outline:hover {
+      background: var(--blue-pale);
+    }
+
     .btn-solid {
       background: var(--blue-accent);
       color: #fff;
     }
-    .btn-solid:hover { background: var(--blue-mid); }
+
+    .btn-solid:hover {
+      background: var(--blue-mid);
+    }
+
     .btn-danger {
       background: transparent;
       border: 2px solid var(--danger);
       color: var(--danger);
     }
-    .btn-danger:hover { background: #fff0f0; }
+
+    .btn-danger:hover {
+      background: #fff0f0;
+    }
 
     /* empty state */
-    .empty { text-align: center; padding: 5rem 2rem; color: var(--gray-text); }
-    .empty-icon { font-size: 4rem; margin-bottom: 1rem; }
-    .empty h3 { font-size: 1.3rem; font-weight: 800; color: var(--blue-deep); margin-bottom: .5rem; }
+    .empty {
+      text-align: center;
+      padding: 5rem 2rem;
+      color: var(--gray-text);
+    }
+
+    .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .empty h3 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--blue-deep);
+      margin-bottom: .5rem;
+    }
 
     /* section heading */
     .section-label {
@@ -284,405 +503,228 @@
     }
   </style>
 </head>
+
 <body>
 
-<!-- NAV -->
-<nav>
-  <div class="logo">سفر<span>بلس</span></div>
-  <ul class="nav-links">
-    <li><a href="#">الرئيسية</a></li>
-    <li><a href="#">رحلات</a></li>
-    <li><a href="#">فنادق</a></li>
-    <li><a href="#">سيارات</a></li>
-    <li><a href="#" class="active">حجوزاتي</a></li>
-  </ul>
-  <div class="nav-user">
-    <div class="avatar">م</div>
-    <span style="color:#fff;font-weight:700;font-size:.9rem;">محمد أحمد</span>
-  </div>
-</nav>
-
-<!-- HERO -->
-<div class="hero">
-  <h1>✈️ حجوزاتي</h1>
-  <p>كل حجوزاتك في مكان واحد — رحلات، فنادق، وسيارات</p>
-</div>
-
-<!-- STATS -->
-<div class="stats">
-  <div class="stat-card">
-    <div class="stat-num">6</div>
-    <div class="stat-lbl">إجمالي الحجوزات</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-num">3</div>
-    <div class="stat-lbl">مؤكدة</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-num">2</div>
-    <div class="stat-lbl">مكتملة</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-num">1</div>
-    <div class="stat-lbl">قيد الانتظار</div>
-  </div>
-</div>
-
-<!-- FILTERS -->
-<div class="filters">
-  <button class="filter-btn active" onclick="filter('all',this)">الكل <span class="count">6</span></button>
-  <button class="filter-btn" onclick="filter('flight',this)">✈️ رحلات <span class="count">2</span></button>
-  <button class="filter-btn" onclick="filter('hotel',this)">🏨 فنادق <span class="count">2</span></button>
-  <button class="filter-btn" onclick="filter('car',this)">🚗 سيارات <span class="count">2</span></button>
-</div>
-
-<!-- GRID -->
-<div class="bookings-grid" id="grid">
-
-  <!-- FLIGHT 1 -->
-  <div class="card" data-type="flight">
-    <div class="card-header">
-      <div class="card-icon icon-flight">✈️</div>
-      <div>
-        <div class="card-type">رحلة طيران</div>
-        <div class="card-title">مصر للطيران — MS505</div>
-      </div>
-      <span class="badge badge-confirmed">مؤكدة</span>
+  <!-- NAV -->
+  <nav>
+    <div class="logo">سفر<span>بلس</span></div>
+    <ul class="nav-links">
+      <li><a href="#">الرئيسية</a></li>
+      <li><a href="#">رحلات</a></li>
+      <li><a href="#">فنادق</a></li>
+      <li><a href="#">سيارات</a></li>
+      <li><a href="#" class="active">حجوزاتي</a></li>
+    </ul>
+    <div class="nav-user">
+      <div class="avatar">م</div>
+      <span style="color:#fff;font-weight:700;font-size:.9rem;">محمد أحمد</span>
     </div>
-    <div class="card-body">
-      <div class="route-line">
-        <div class="route-city">CAI</div>
-        <div class="route-arrow">
-          <div class="route-dash"></div>
-          <span class="plane-icon">✈</span>
-          <div class="route-dash"></div>
-        </div>
-        <div class="route-city">DXB</div>
-      </div>
-      <div class="info-row">
-        <div class="info-block">
-          <div class="info-label">تاريخ السفر</div>
-          <div class="info-value">15 مارس 2025</div>
-        </div>
-        <div class="info-block">
-          <div class="info-label">وقت الإقلاع</div>
-          <div class="info-value">09:30 ص</div>
-        </div>
-        <div class="info-block">
-          <div class="info-label">الدرجة</div>
-          <div class="info-value">اقتصادية</div>
-        </div>
-      </div>
-      <div class="info-row">
-        <div class="info-block">
-          <div class="info-label">رقم الحجز</div>
-          <div class="info-value">#FL-20481</div>
-        </div>
-        <div class="info-block">
-          <div class="info-label">عدد المسافرين</div>
-          <div class="info-value">2 راكب</div>
-        </div>
-      </div>
-      <hr class="divider" />
-      <div class="card-footer">
-        <div style="display:flex;gap:.5rem;">
-          <button class="btn btn-outline">التفاصيل</button>
-          <button class="btn btn-solid">تذكرة الإلكترونية</button>
-        </div>
-      </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>✈️ حجوزاتي</h1>
+    <p>كل حجوزاتك في مكان واحد — رحلات، فنادق، وسيارات</p>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-num" id="totalBookings">0</div>
+      <div class="stat-lbl">إجمالي الحجوزات</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-num" id="confirmedBookings">0</div>
+      <div class="stat-lbl">مؤكدة</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-num" id="completedBookings">0</div>
+      <div class="stat-lbl">مكتملة</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-num" id="pendingBookings">0</div>
+      <div class="stat-lbl">قيد الانتظار</div>
     </div>
   </div>
 
-  <!-- FLIGHT 2 -->
-  <div class="card" data-type="flight">
-    <div class="card-header">
-      <div class="card-icon icon-flight">✈️</div>
-      <div>
-        <div class="card-type">رحلة طيران</div>
-        <div class="card-title">فلاي دبي — FZ201</div>
-      </div>
-      <span class="badge badge-completed">مكتملة</span>
-    </div>
-    <div class="card-body">
-      <div class="route-line">
-        <div class="route-city">CAI</div>
-        <div class="route-arrow">
-          <div class="route-dash"></div>
-          <span class="plane-icon">✈</span>
-          <div class="route-dash"></div>
-        </div>
-        <div class="route-city">IST</div>
-      </div>
-      <div class="info-row">
-        <div class="info-block">
-          <div class="info-label">تاريخ السفر</div>
-          <div class="info-value">10 يناير 2025</div>
-        </div>
-        <div class="info-block">
-          <div class="info-label">وقت الإقلاع</div>
-          <div class="info-value">14:00 م</div>
-        </div>
-        <div class="info-block">
-          <div class="info-label">الدرجة</div>
-          <div class="info-value">أعمال</div>
-        </div>
-      </div>
-      <div class="info-row">
-        <div class="info-block">
-          <div class="info-label">رقم الحجز</div>
-          <div class="info-value">#FL-18932</div>
-        </div>
-        <div class="info-block">
-          <div class="info-label">عدد المسافرين</div>
-          <div class="info-value">1 راكب</div>
-        </div>
-      </div>
-      <hr class="divider" />
-      <div class="card-footer">
+  <!-- FILTERS -->
+  <div class="filters">
+    <button class="filter-btn active" onclick="filter('all',this)">
+      الكل <span class="count" id="allCount">0</span>
+    </button>
 
-        <div style="display:flex;gap:.5rem;">
-          <button class="btn btn-outline">التفاصيل</button>
-        </div>
-      </div>
-    </div>
+    <button class="filter-btn" onclick="filter('flight',this)">
+      ✈️ رحلات <span class="count" id="flightCount">0</span>
+    </button>
+
+    <button class="filter-btn" onclick="filter('hotel',this)">
+      🏨 فنادق <span class="count" id="hotelCount">0</span>
+    </button>
+
+    <button class="filter-btn" onclick="filter('car',this)">
+      🚗 سيارات <span class="count" id="carCount">0</span>
+    </button>
   </div>
 
-  <!-- HOTEL 1 -->
-  <div class="card" data-type="hotel">
-    <div class="card-header">
-      <div class="card-icon icon-hotel">🏨</div>
-      <div>
-        <div class="card-type">فندق</div>
-        <div class="card-title">فندق ماريوت القاهرة</div>
-      </div>
-      <span class="badge badge-confirmed">مؤكدة</span>
-    </div>
-    <div class="card-body">
-      <div class="info-row">
-        <div class="info-block">
-          <div class="info-label">📍 الموقع</div>
-          <div class="info-value">الزمالك، القاهرة</div>
-        </div>
-        <div class="info-block">
-          <div class="info-label">⭐ التقييم</div>
-          <div class="info-value">5 نجوم</div>
-        </div>
-      </div>
-      <div class="info-row">
-        <div class="info-block">
-          <div class="info-label">تاريخ الوصول</div>
-          <div class="info-value">15 مارس 2025</div>
-        </div>
-        <div class="info-block">
-          <div class="info-label">تاريخ المغادرة</div>
-          <div class="info-value">18 مارس 2025</div>
-        </div>
-        <div class="info-block">
-          <div class="info-label">المدة</div>
-          <div class="info-value">3 ليالي</div>
-        </div>
-      </div>
-      <div class="info-row">
-        <div class="info-block">
-          <div class="info-label">نوع الغرفة</div>
-          <div class="info-value">غرفة ديلوكس</div>
-        </div>
-        <div class="info-block">
-          <div class="info-label">رقم الحجز</div>
-          <div class="info-value">#HT-55210</div>
-        </div>
-      </div>
-      <hr class="divider" />
-      <div class="card-footer">
-        <div style="display:flex;gap:.5rem;">
-          <button class="btn btn-danger">إلغاء</button>
-          <button class="btn btn-solid">التفاصيل</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- GRID -->
+  <div class="bookings-grid" id="grid">
 
-  <!-- HOTEL 2 -->
-  <div class="card" data-type="hotel">
-    <div class="card-header">
-      <div class="card-icon icon-hotel">🏨</div>
-      <div>
-        <div class="card-type">فندق</div>
-        <div class="card-title">هيلتون الإسكندرية</div>
-      </div>
-      <span class="badge badge-completed">مكتملة</span>
-    </div>
-    <div class="card-body">
-      <div class="info-row">
-        <div class="info-block">
-          <div class="info-label">📍 الموقع</div>
-          <div class="info-value">كورنيش الإسكندرية</div>
-        </div>
-        <div class="info-block">
-          <div class="info-label">⭐ التقييم</div>
-          <div class="info-value">5 نجوم</div>
-        </div>
-      </div>
-      <div class="info-row">
-        <div class="info-block">
-          <div class="info-label">تاريخ الوصول</div>
-          <div class="info-value">5 يناير 2025</div>
-        </div>
-        <div class="info-block">
-          <div class="info-label">تاريخ المغادرة</div>
-          <div class="info-value">8 يناير 2025</div>
-        </div>
-        <div class="info-block">
-          <div class="info-label">المدة</div>
-          <div class="info-value">3 ليالي</div>
-        </div>
-      </div>
-      <div class="info-row">
-        <div class="info-block">
-          <div class="info-label">نوع الغرفة</div>
-          <div class="info-value">سويت بحري</div>
-        </div>
-        <div class="info-block">
-          <div class="info-label">رقم الحجز</div>
-          <div class="info-value">#HT-49873</div>
-        </div>
-      </div>
-      <hr class="divider" />
-      <div class="card-footer">
 
-        <div>
-          <button class="btn btn-outline">التفاصيل</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- CAR 1 -->
-  <div class="card" data-type="car">
-    <div class="card-header">
-      <div class="card-icon icon-car">🚗</div>
-      <div>
-        <div class="card-type">إيجار سيارة</div>
-        <div class="card-title">تويوتا كامري 2024</div>
-      </div>
-      <span class="badge badge-confirmed">مؤكدة</span>
-    </div>
-    <div class="card-body">
-      <div class="info-row">
-        <div class="info-block">
-          <div class="info-label">📍 موقع الاستلام</div>
-          <div class="info-value">مطار القاهرة</div>
-        </div>
-        <div class="info-block">
-          <div class="info-label">🚗 الفئة</div>
-          <div class="info-value">سيدان فاخرة</div>
-        </div>
-      </div>
-      <div class="info-row">
-        <div class="info-block">
-          <div class="info-label">تاريخ الاستلام</div>
-          <div class="info-value">15 مارس 2025</div>
-        </div>
-        <div class="info-block">
-          <div class="info-label">تاريخ التسليم</div>
-          <div class="info-value">18 مارس 2025</div>
-        </div>
-        <div class="info-block">
-          <div class="info-label">المدة</div>
-          <div class="info-value">3 أيام</div>
-        </div>
-      </div>
-      <div class="info-row">
-        <div class="info-block">
-          <div class="info-label">🛡️ التأمين</div>
-          <div class="info-value">شامل</div>
-        </div>
-        <div class="info-block">
-          <div class="info-label">رقم الحجز</div>
-          <div class="info-value">#CR-77412</div>
-        </div>
-      </div>
-      <hr class="divider" />
-      <div class="card-footer">
+  </div><!-- /grid -->
 
-        <div style="display:flex;gap:.5rem;">
-          <button class="btn btn-danger">إلغاء</button>
-          <button class="btn btn-solid">التفاصيل</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <script>
+    function filter(type, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
 
-  <!-- CAR 2 -->
-  <div class="card" data-type="car">
-    <div class="card-header">
-      <div class="card-icon icon-car">🚗</div>
-      <div>
-        <div class="card-type">إيجار سيارة</div>
-        <div class="card-title">هيونداي توسان 2024</div>
-      </div>
-      <span class="badge badge-pending">قيد الانتظار</span>
-    </div>
-    <div class="card-body">
-      <div class="info-row">
-        <div class="info-block">
-          <div class="info-label">📍 موقع الاستلام</div>
-          <div class="info-value">محطة مصر، القاهرة</div>
-        </div>
-        <div class="info-block">
-          <div class="info-label">🚗 الفئة</div>
-          <div class="info-value">SUV</div>
-        </div>
-      </div>
-      <div class="info-row">
-        <div class="info-block">
-          <div class="info-label">تاريخ الاستلام</div>
-          <div class="info-value">20 أبريل 2025</div>
-        </div>
-        <div class="info-block">
-          <div class="info-label">تاريخ التسليم</div>
-          <div class="info-value">25 أبريل 2025</div>
-        </div>
-        <div class="info-block">
-          <div class="info-label">المدة</div>
-          <div class="info-value">5 أيام</div>
-        </div>
-      </div>
-      <div class="info-row">
-        <div class="info-block">
-          <div class="info-label">🛡️ التأمين</div>
-          <div class="info-value">أساسي</div>
-        </div>
-        <div class="info-block">
-          <div class="info-label">رقم الحجز</div>
-          <div class="info-value">#CR-80055</div>
-        </div>
-      </div>
-      <hr class="divider" />
-      <div class="card-footer">
-        <div style="display:flex;gap:.5rem;">
-          <button class="btn btn-danger">إلغاء</button>
-          <button class="btn btn-solid">التفاصيل</button>
-        </div>
-      </div>
-    </div>
-  </div>
+      document.querySelectorAll('.card').forEach(card => {
+        if (type === 'all' || card.dataset.type === type) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+    async function loadMyBookings() {
 
-</div><!-- /grid -->
+      const token = localStorage.getItem("token");
 
-<script>
-  function filter(type, btn) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-
-    document.querySelectorAll('.card').forEach(card => {
-      if (type === 'all' || card.dataset.type === type) {
-        card.style.display = '';
-      } else {
-        card.style.display = 'none';
+      if (!token) {
+        window.location.href = "../login.html";
+        return;
       }
-    });
-  }
-</script>
+
+      try {
+        const res = await fetch("http://localhost:5000/api/my-bookings", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        const data = await res.json();
+
+        const grid = document.getElementById("grid");
+        grid.innerHTML = "";
+
+        /* =====================
+           HOTEL BOOKINGS
+        ======================*/
+        data.hotelBookings.forEach(hotel => {
+
+          grid.innerHTML += `
+        <div class="card" data-type="hotel">
+          <div class="card-header">
+            <div class="card-icon icon-hotel">🏨</div>
+            <div>
+              <div class="card-type">فندق</div>
+              <div class="card-title">${hotel.hotelName}</div>
+            </div>
+            <span class="badge badge-${hotel.status}">
+              ${hotel.status}
+            </span>
+          </div>
+
+          <div class="card-body">
+            <div class="info-row">
+              <div class="info-block">
+                <div class="info-label">تاريخ الوصول</div>
+                <div class="info-value">
+                  ${new Date(hotel.checkInDate).toLocaleDateString()}
+                </div>
+              </div>
+
+              <div class="info-block">
+                <div class="info-label">تاريخ المغادرة</div>
+                <div class="info-value">
+                  ${new Date(hotel.checkOutDate).toLocaleDateString()}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+        });
+
+
+        /* =====================
+           CAR BOOKINGS
+        ======================*/
+        data.carBookings.forEach(car => {
+
+          grid.innerHTML += `
+        <div class="card" data-type="car">
+          <div class="card-header">
+            <div class="card-icon icon-car">🚗</div>
+            <div>
+              <div class="card-type">سيارة</div>
+              <div class="card-title">${car.carName}</div>
+            </div>
+            <span class="badge badge-${car.status}">
+              ${car.status}
+            </span>
+          </div>
+
+          <div class="card-body">
+
+            <div class="info-row">
+              <div class="info-block">
+                <div class="info-label">تاريخ الاستلام</div>
+                <div class="info-value">
+                  ${new Date(car.pickupDateTime).toLocaleDateString()}
+                </div>
+              </div>
+
+              <div class="info-block">
+                <div class="info-label">تاريخ التسليم</div>
+                <div class="info-value">
+                  ${new Date(car.dropoffDateTime).toLocaleDateString()}
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      `;
+        });
+        const allBookings = [
+          ...data.carBookings,
+          ...data.hotelBookings
+        ];
+
+        // ===== COUNTS =====
+        const total = allBookings.length;
+
+        const confirmed = allBookings.filter(b => b.status === "confirmed").length;
+        const completed = allBookings.filter(b => b.status === "completed").length;
+        const pending = allBookings.filter(b => b.status === "pending").length;
+
+        const hotelCount = data.hotelBookings.length;
+        const carCount = data.carBookings.length;
+        const flightCount = 0; // لحد ما تضيف flights
+
+        // ===== UPDATE UI =====
+        document.getElementById("totalBookings").textContent = total;
+        document.getElementById("confirmedBookings").textContent = confirmed;
+        document.getElementById("completedBookings").textContent = completed;
+        document.getElementById("pendingBookings").textContent = pending;
+
+        document.getElementById("allCount").textContent = total;
+        document.getElementById("hotelCount").textContent = hotelCount;
+        document.getElementById("carCount").textContent = carCount;
+        document.getElementById("flightCount").textContent = flightCount;
+
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    loadMyBookings();
+  </script>
 </body>
+
 </html>
